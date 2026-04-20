@@ -4,6 +4,9 @@
  */
 package asmedit.machine;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 /*
  *
  * @author koukola
@@ -20,6 +23,10 @@ package asmedit.machine;
 public class ProcessStateRegister {
     int content;
 
+    
+    
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    
     public ProcessStateRegister() {
         this.content = 0;
     }
@@ -28,12 +35,14 @@ public class ProcessStateRegister {
     
     public void setContent(int content) {
         this.content = content;
+        pcs.firePropertyChange("content", null, content);
         
     }
     
     public void setAluFlags(int content) {
         this.content &= 0xF0;
         this.content |= (content & 0x0F);
+        pcs.firePropertyChange("content", null, content);
     }
     
     public int getAluFlags() {
@@ -71,7 +80,11 @@ public class ProcessStateRegister {
     
     public void reset() {
         this.content = 0;
+        pcs.firePropertyChange("content", null, content);
     }
     
+    public void addListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
+    }
     
 }

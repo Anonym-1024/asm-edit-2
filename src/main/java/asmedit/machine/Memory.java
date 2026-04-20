@@ -4,20 +4,23 @@
  */
 package asmedit.machine;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 /**
  *
  * @author koukola
  */
 public class Memory {
     
-    protected int address;
     protected byte[] content;
     protected int size;
     
     
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    
 
     public Memory() {
-        this.address = 0;
         this.size = 1 << 20;
         this.content = new byte[this.size];
         
@@ -27,10 +30,7 @@ public class Memory {
     
     
 
-    public void setAddress(int addr) {
-        this.address = addr;
-    }
-        
+   
    
    
     
@@ -44,6 +44,9 @@ public class Memory {
             }
             this.content[addr + i] = bytes[i];
         }
+        pcs.firePropertyChange("content", null, content);
+        
+        
     }
     
     public void setByte(int addr, byte v) {
@@ -52,6 +55,8 @@ public class Memory {
         }
         
         content[addr] = v;
+        
+        pcs.firePropertyChange("content", null, content);
     }
     
     public byte getByte(int addr) {
@@ -61,11 +66,18 @@ public class Memory {
         return 0;
     }
     
-    public void clear() {
-        this.content = new byte[this.size];
+    public int getLength() {
+        return content.length;
     }
     
+    public void clear() {
+        this.content = new byte[this.size];
+        pcs.firePropertyChange("content", null, content);
+    }
     
+    public void addListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
+    }
     
     
 }

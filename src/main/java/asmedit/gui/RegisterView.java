@@ -4,77 +4,91 @@
  */
 package asmedit.gui;
 
+import asmedit.machine.Register;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 /**
  *
  * @author koukola
  */
-
-
-import javax.swing.*;
-import java.awt.*;
-
 public class RegisterView extends JPanel {
+    private JTextField textField;
+    private JComboBox<String> radixPicker;
+    private JLabel label;
     
-    private int registerValue; // Stores the underlying numeric value
-    private String registerName;
+    protected String registerName;
+    protected int content = 90;
     
-    private final JTextField displayField;
-    private final JComboBox<String> radixSelector;
-
+    public RegisterView(String registerName, Register r) {
+        this.registerName = registerName;
+        r.addListener(e -> updateValue(e));
+        
+        initComponents();
+    }
+    
     public RegisterView() {
-        this.registerName = "Register";
-        this.registerValue = 0;
-       
+        this.registerName = "r5";
+        
+        
+        initComponents();
+    }
+    
+    private void initComponents() {
+        
+        
+        
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(BorderFactory.createTitledBorder("Register Content"));
-
-        
-        displayField = new JTextField(15);
-        displayField.setEditable(false);
-        displayField.setHorizontalAlignment(JTextField.RIGHT);
-        displayField.setFont(new Font(Font.MONOSPACED, Font.BOLD, 14)); // Monospaced is better for reading hex/binary
-        add(displayField);
-
-        
-        
-        
-        
-        String[] options = {"BIN", "DEC", "HEX"};
-        radixSelector = new JComboBox<>(options);
-        
        
-        radixSelector.setSelectedItem("DEC");
+        label = new JLabel(registerName + ": ");
+        label.setPreferredSize(new Dimension(50, 20));
+        label.setHorizontalAlignment(JLabel.RIGHT);
+        this.add(label);
         
-        add(radixSelector);
+        textField = new JTextField();
+        textField.setEditable(false);
+        textField.setHorizontalAlignment(JTextField.RIGHT);
+        textField.setPreferredSize(new Dimension(100, 20));
+        add(textField);
         
-
-        radixSelector.addActionListener(e -> updateDisplay());
-
-        // 5. Initialize the display
-        updateDisplay();
+        
+        radixPicker = new JComboBox<>(new String[]{"BIN", "DEC", "HEX"});
+        radixPicker.setSelectedItem("DEC");
+        radixPicker.addActionListener((e) -> updateView());
+        add(radixPicker);
+        
+        updateView();
+        
     }
-
     
-    public void setValue(int value) {
-        this.registerValue = value;
-        updateDisplay();
-    }
-
-   
-    
-
-    
-    private void updateDisplay() {
-        String selectedRadix = (String) radixSelector.getSelectedItem();
-        
-        if ("BIN".equals(selectedRadix)) {
-            displayField.setText(Integer.toBinaryString(registerValue));
-        } else if ("HEX".equals(selectedRadix)) {
-            displayField.setText(Integer.toHexString(registerValue).toUpperCase());
-        } else {
-            displayField.setText(Integer.toString(registerValue));
+    private void updateView() {
+        switch ((String)radixPicker.getSelectedItem()) {
+            case "BIN":
+                this.textField.setText(Integer.toBinaryString(this.content));
+                break;
+            case "HEX":
+                this.textField.setText(Integer.toBinaryString(this.content));
+                break;
+            default:
+                this.textField.setText(Integer.toString(this.content));
+                break;
         }
     }
-
     
+    
+    
+    private void updateValue(PropertyChangeEvent e) {
+        this.content = ((Integer)e.getNewValue()).intValue();
+        updateView();
+    }
 }

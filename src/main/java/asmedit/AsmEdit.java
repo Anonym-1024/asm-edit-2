@@ -6,7 +6,7 @@ package asmedit;
 
 
 
-import asmedit.gui.MachineView;
+import asmedit.gui.MachineWindow;
 import asmedit.gui.RegisterView;
 import asmedit.machine.Machine;
 import asmedit.machine.MachineConfig;
@@ -31,8 +31,8 @@ public class AsmEdit {
      */
     public static void main(String[] args) {
         
-        MachineView.main(args);
         
+        MachineWindow.main(args);
         
         
         File file = new File("/Users/koukola/Documents/asm/resources/example");

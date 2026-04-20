@@ -4,6 +4,10 @@
  */
 package asmedit.machine;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.EventListener;
+
 /**
  *
  * @author koukola
@@ -11,6 +15,10 @@ package asmedit.machine;
 public class Register {
 
     protected int content;
+    
+    
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    
     
     public Register() {
         this.content = 0;
@@ -22,5 +30,10 @@ public class Register {
 
     public void setContent(int content) {
         this.content = content & 0xFF;
+        pcs.firePropertyChange("content", null, content);
+    }
+    
+    public void addListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
     }
 }

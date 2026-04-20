@@ -4,6 +4,9 @@
  */
 package asmedit.machine;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 /**
  *
  * @author koukola
@@ -11,6 +14,9 @@ package asmedit.machine;
 public class InterruptProgramCounter {
     protected int content;
     protected int defaultAddress;
+    
+    
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public InterruptProgramCounter() {
         this.content = 0;
@@ -22,6 +28,7 @@ public class InterruptProgramCounter {
 
     public void setContent(int content) {
         this.content = content;
+        pcs.firePropertyChange("content", null, content);
     }
 
     public void setDefaultAddress(int defaultAddress) {
@@ -32,16 +39,19 @@ public class InterruptProgramCounter {
     
     public void increment() {
         this.content += 1;
+        pcs.firePropertyChange("content", null, content);
     }
     
     public void setByte0(int byte0) {
         this.content &= 0xFF00;
         this.content |= (byte0 & 0x00FF);
+        pcs.firePropertyChange("content", null, content);
     }
     
     public void setByte1(int byte1) {
         this.content &= 0x00FF;
         this.content |= (byte1 & 0xFF00);
+        pcs.firePropertyChange("content", null, content);
     }
     
     public int getByte0() {
@@ -55,5 +65,9 @@ public class InterruptProgramCounter {
         this.content = this.defaultAddress;
     }
     
+    
+    public void addListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
+    }
     
 }

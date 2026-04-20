@@ -4,6 +4,9 @@
  */
 package asmedit.machine;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 /**
  *
  * @author koukola
@@ -20,7 +23,7 @@ package asmedit.machine;
 public class InterruptRegister {
     protected byte content;
     
-    
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public InterruptRegister() {
         this.content = 0;
@@ -28,31 +31,37 @@ public class InterruptRegister {
     
     public void setINT() {
         this.content |= 0b00001;
-        System.out.println("Interrupt set");
+        
+        pcs.firePropertyChange("content", null, content);
         
     }
     
     public void setINI() {
         this.content |= 0b00010;
         setINT();
+        pcs.firePropertyChange("content", null, content);
     }
     
     public void setPF() {
         this.content |= 0b00100;
         setINT();
+        pcs.firePropertyChange("content", null, content);
     }
     
     public void setIRQ() {
         this.content |= 0b10000;
+        pcs.firePropertyChange("content", null, content);
     }
     
     public void setSVC() {
         this.content |= 0b01000;
         setINT();
+        pcs.firePropertyChange("content", null, content);
     }
     
     public int getContent() {
         return (int)this.content;
+        
     }
     
     public boolean isInterrupt() {
@@ -65,10 +74,14 @@ public class InterruptRegister {
     
     public void clear() {
         this.content = 0;
+        pcs.firePropertyChange("content", null, content);
     }
     
     
     
+    public void addListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
+    }
     
     
     

@@ -4,6 +4,8 @@
  */
 package asmedit.machine;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Vector;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Vector;
 public class Machine {
     
     protected MachineConfig config;
-    protected State state;
+    protected volatile State state;
     
     protected ControlUnit controlUnit;
     
@@ -30,6 +32,7 @@ public class Machine {
     protected Memory memory;
     
     
+    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     
     public enum State {
         IDLE,
@@ -62,6 +65,18 @@ public class Machine {
         
     }
 
+    public InterruptProgramCounter getIntpc() {
+        return intpc;
+    }
+
+    public PageTableBaseRegister getPtbr() {
+        return ptbr;
+    }
+
+    public PropertyChangeSupport getPcs() {
+        return pcs;
+    }
+    
     public Register[] getRegisters() {
         return registers;
     }
@@ -120,6 +135,8 @@ public class Machine {
         memory.setBytes(0, config.defaultMemory);
         
         state = State.IDLE;
+        
+        pcs.firePropertyChange("state", -1, 1);
     }
     
     
@@ -133,23 +150,28 @@ public class Machine {
     
     public void run() {
         state = State.RUNNING;
+        pcs.firePropertyChange("state", -1, 2);
         while (state == State.RUNNING) {
             controlUnit.cycle();
         }
     }
     
     public void stop() {
+        pcs.firePropertyChange("state", -1, 0);
         state = State.STOPPED;
     }
    
     public void pause() {
+        pcs.firePropertyChange("state", -1, 1);
         state = State.IDLE;
     }
     
     
     
     
-    
+    public void addListener(PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(l);
+    }
     
     
     
