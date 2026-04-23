@@ -4,6 +4,7 @@
  */
 package asmedit.machine;
 
+import asmedit.gui.EventEmmitor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.EventListener;
@@ -12,7 +13,7 @@ import java.util.EventListener;
  *
  * @author koukola
  */
-public class Register {
+public class Register implements EventEmmitor {
 
     protected int content;
     

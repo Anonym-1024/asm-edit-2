@@ -5,6 +5,14 @@
 package asmedit.gui;
 
 import asmedit.machine.Machine;
+import asmedit.machine.Register;
+import asmedit.utils.TranslationTableGenerator;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Scanner;
+import javax.swing.BoxLayout;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -18,7 +26,15 @@ public class MachineWindow extends javax.swing.JFrame {
      * Creates new form MachineWindow
      */
     public MachineWindow() {
+        
+        this.machine = new Machine();
+        
         initComponents();
+        
+        initGeneralRegisters();
+        initSystemGeneralRegisters();
+        
+        
     }
 
     /**
@@ -30,34 +46,156 @@ public class MachineWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        registerView1 = new asmedit.gui.RegisterView();
-        registerView2 = new asmedit.gui.RegisterView();
+        registersPanel = new javax.swing.JPanel();
+        systemRegistersPanel = new javax.swing.JPanel();
+        bootSettingsButton = new javax.swing.JButton();
+        bootButton = new javax.swing.JButton();
+        stepButton = new javax.swing.JButton();
+        runButton = new javax.swing.JButton();
+        pauseButton = new javax.swing.JButton();
+        stopButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout registersPanelLayout = new javax.swing.GroupLayout(registersPanel);
+        registersPanel.setLayout(registersPanelLayout);
+        registersPanelLayout.setHorizontalGroup(
+            registersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 209, Short.MAX_VALUE)
+        );
+        registersPanelLayout.setVerticalGroup(
+            registersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 493, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout systemRegistersPanelLayout = new javax.swing.GroupLayout(systemRegistersPanel);
+        systemRegistersPanel.setLayout(systemRegistersPanelLayout);
+        systemRegistersPanelLayout.setHorizontalGroup(
+            systemRegistersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        systemRegistersPanelLayout.setVerticalGroup(
+            systemRegistersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 286, Short.MAX_VALUE)
+        );
+
+        bootSettingsButton.setText("Boot options");
+        bootSettingsButton.addActionListener(this::bootSettingsButtonActionPerformed);
+
+        bootButton.setText("Boot");
+        bootButton.addActionListener(this::bootButtonActionPerformed);
+
+        stepButton.setText("Step");
+        stepButton.setEnabled(false);
+        stepButton.addActionListener(this::stepButtonActionPerformed);
+
+        runButton.setText("Run");
+        runButton.setEnabled(false);
+        runButton.addActionListener(this::runButtonActionPerformed);
+
+        pauseButton.setText("Pause");
+        pauseButton.setEnabled(false);
+        pauseButton.addActionListener(this::pauseButtonActionPerformed);
+
+        stopButton.setText("Stop");
+        stopButton.setEnabled(false);
+        stopButton.addActionListener(this::stopButtonActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(565, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(registerView1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(registerView2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bootSettingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bootButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(runButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pauseButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(systemRegistersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(registersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(registerView1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(registerView2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(377, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(bootSettingsButton)
+                        .addComponent(bootButton)
+                        .addComponent(stepButton)
+                        .addComponent(runButton)
+                        .addComponent(pauseButton)
+                        .addComponent(stopButton))
+                    .addComponent(registersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(systemRegistersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bootSettingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bootSettingsButtonActionPerformed
+        new BootSettingsWindow(machine.getConfig()).setVisible(true);
+    }//GEN-LAST:event_bootSettingsButtonActionPerformed
+
+    private void bootButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bootButtonActionPerformed
+        bootButton.setEnabled(false);
+        bootSettingsButton.setEnabled(false);
+        stepButton.setEnabled(true);
+        runButton.setEnabled(true);
+        stopButton.setEnabled(true);
+        
+        machine.startAndBoot();
+    }//GEN-LAST:event_bootButtonActionPerformed
+
+    private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
+        machine.nextCycle();
+    }//GEN-LAST:event_stepButtonActionPerformed
+
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+        runButton.setEnabled(false);
+        stepButton.setEnabled(false);
+        pauseButton.setEnabled(true);
+        
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                machine.run();
+                return null;
+            }
+        }.execute();
+    }//GEN-LAST:event_runButtonActionPerformed
+
+    private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseButtonActionPerformed
+        
+        runButton.setEnabled(true);
+        stepButton.setEnabled(true);
+        pauseButton.setEnabled(false);
+        
+        machine.pause();
+    }//GEN-LAST:event_pauseButtonActionPerformed
+
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+        // TODO add your handling code here:
+        bootButton.setEnabled(true);
+        bootSettingsButton.setEnabled(true);
+        stepButton.setEnabled(false);
+        runButton.setEnabled(false);
+        pauseButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        
+        machine.stop();
+    }//GEN-LAST:event_stopButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -86,12 +224,63 @@ public class MachineWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private asmedit.gui.RegisterView registerView1;
-    private asmedit.gui.RegisterView registerView2;
+    private javax.swing.JButton bootButton;
+    private javax.swing.JButton bootSettingsButton;
+    private javax.swing.JButton pauseButton;
+    private javax.swing.JPanel registersPanel;
+    private javax.swing.JButton runButton;
+    private javax.swing.JButton stepButton;
+    private javax.swing.JButton stopButton;
+    private javax.swing.JPanel systemRegistersPanel;
     // End of variables declaration//GEN-END:variables
 
+    
+    private void initGeneralRegisters() {
+        
+        registersPanel.setLayout(new BoxLayout(registersPanel, BoxLayout.Y_AXIS));
+        
+        int c = 0;
+        for (Register r: machine.getRegisters()) {
+            RegisterView rv = new RegisterView("r" + c, r);
+            registersPanel.add(rv);
+            
+            c += 1;    
+        }
+    }
+    
+    private void initSystemGeneralRegisters() {
+        systemRegistersPanel.setLayout(new BoxLayout(systemRegistersPanel, BoxLayout.Y_AXIS));
+        
+        RegisterView pcv = new RegisterView("pc", machine.getPc());
+        
+        systemRegistersPanel.add(pcv);
+        
+        
+        RegisterView ipcv = new RegisterView("intpc", machine.getIntpc());
+        
+        systemRegistersPanel.add(ipcv);
+        
+        
+        RegisterView psrv = new RegisterView("psr", machine.getPsr());
+        
+        systemRegistersPanel.add(psrv);
+        
+        
+        RegisterView intr = new RegisterView("intr", machine.getIntr());
+        
+        systemRegistersPanel.add(intr);
+        
+        
+        RegisterView ptbr = new RegisterView("ptbr", machine.getPtbr());
+        
+        systemRegistersPanel.add(ptbr);
+        
+        
+       
+    }
 
-    protected Machine machine;
+    
+    protected volatile Machine machine;
 
 
 

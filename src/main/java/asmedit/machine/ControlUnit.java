@@ -109,6 +109,7 @@ public class ControlUnit {
         return new Instruction(byte0, byte1, byte2, byte3);
     }
     
+    
     protected void execute(Instruction i) {
         System.out.println(i.getOpcode());
         switch (i.getOpcode()) {

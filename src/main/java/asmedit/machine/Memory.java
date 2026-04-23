@@ -4,6 +4,7 @@
  */
 package asmedit.machine;
 
+import asmedit.gui.EventEmmitor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -11,7 +12,7 @@ import java.beans.PropertyChangeSupport;
  *
  * @author koukola
  */
-public class Memory {
+public class Memory implements EventEmmitor  {
     
     protected byte[] content;
     protected int size;

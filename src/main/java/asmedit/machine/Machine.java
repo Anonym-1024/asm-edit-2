@@ -120,16 +120,20 @@ public class Machine {
             return;
         }
         
+        
         for (Register r: registers) {
             r.setContent(0);
         }
+        
         
         pc.setContent(config.bootAddress);
         intpc.setDefaultAddress(config.interruptAddress);
         intpc.reset();
         
         psr.setContent(0);
+        
         intr.clear();
+        
         ptbr.setContent(0);
         
         memory.setBytes(0, config.defaultMemory);
@@ -137,6 +141,7 @@ public class Machine {
         state = State.IDLE;
         
         pcs.firePropertyChange("state", -1, 1);
+        System.out.println("end");
     }
     
     

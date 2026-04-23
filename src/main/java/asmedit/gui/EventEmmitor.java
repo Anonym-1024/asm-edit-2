@@ -1,0 +1,15 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package asmedit.gui;
+
+import java.beans.PropertyChangeListener;
+
+/**
+ *
+ * @author koukola
+ */
+public interface EventEmmitor {
+    void addListener(PropertyChangeListener l);
+}

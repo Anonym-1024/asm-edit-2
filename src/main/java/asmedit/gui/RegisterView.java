@@ -28,17 +28,19 @@ public class RegisterView extends JPanel {
     private JLabel label;
     
     protected String registerName;
-    protected int content = 90;
+    protected int content;
     
-    public RegisterView(String registerName, Register r) {
+    public RegisterView(String registerName, EventEmmitor r) {
         this.registerName = registerName;
+        this.content = 0;
+        
         r.addListener(e -> updateValue(e));
         
         initComponents();
     }
     
     public RegisterView() {
-        this.registerName = "r5";
+        this.registerName = "test";
         
         
         initComponents();
@@ -77,7 +79,7 @@ public class RegisterView extends JPanel {
                 this.textField.setText(Integer.toBinaryString(this.content));
                 break;
             case "HEX":
-                this.textField.setText(Integer.toBinaryString(this.content));
+                this.textField.setText(Integer.toHexString(this.content));
                 break;
             default:
                 this.textField.setText(Integer.toString(this.content));

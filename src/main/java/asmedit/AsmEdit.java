@@ -6,6 +6,7 @@ package asmedit;
 
 
 
+import asmedit.gui.BootSettingsWindow;
 import asmedit.gui.MachineWindow;
 import asmedit.gui.RegisterView;
 import asmedit.machine.Machine;
@@ -34,7 +35,7 @@ public class AsmEdit {
         
         MachineWindow.main(args);
         
-        
+        /*
         File file = new File("/Users/koukola/Documents/asm/resources/example");
         byte[] fileContent = new byte[(int) file.length()];
 
@@ -83,6 +84,7 @@ public class AsmEdit {
             s.nextLine();
             
         }
+    */
         
     }
     
