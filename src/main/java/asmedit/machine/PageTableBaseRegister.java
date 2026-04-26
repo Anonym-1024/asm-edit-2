@@ -4,9 +4,9 @@
  */
 package asmedit.machine;
 
-import asmedit.gui.EventEmmitor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import asmedit.gui.EventEmitter;
 
 /**
  *
@@ -39,7 +39,7 @@ import java.beans.PropertyChangeSupport;
 */
 
 
-public class PageTableBaseRegister implements EventEmmitor  {
+public class PageTableBaseRegister implements EventEmitter  {
     protected int content;
 
     

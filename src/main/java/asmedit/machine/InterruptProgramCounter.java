@@ -4,15 +4,15 @@
  */
 package asmedit.machine;
 
-import asmedit.gui.EventEmmitor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import asmedit.gui.EventEmitter;
 
 /**
  *
  * @author koukola
  */
-public class InterruptProgramCounter implements EventEmmitor  {
+public class InterruptProgramCounter implements EventEmitter  {
     protected int content;
     protected int defaultAddress;
     

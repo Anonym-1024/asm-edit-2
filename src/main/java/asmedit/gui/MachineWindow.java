@@ -6,13 +6,20 @@ package asmedit.gui;
 
 import asmedit.machine.Machine;
 import asmedit.machine.Register;
+import asmedit.machine.devices.ConsoleDevice;
+import asmedit.machine.devices.KeyboardDevice;
+import asmedit.machine.devices.TextOutputDevice;
 import asmedit.utils.TranslationTableGenerator;
+import java.awt.event.FocusEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
 import javax.swing.SwingWorker;
+import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -28,11 +35,23 @@ public class MachineWindow extends javax.swing.JFrame {
     public MachineWindow() {
         
         this.machine = new Machine();
+        this.machine.addListener(e -> changeState(e));
+        
+        ConsoleDevice dev = new ConsoleDevice();
+        
+        this.machine.getIo().addDevice(dev);
+        
+        
+        new ConsoleDeviceWindow(dev).setVisible(true);
+        
         
         initComponents();
         
         initGeneralRegisters();
         initSystemGeneralRegisters();
+        
+        
+        
         
         
     }
@@ -149,11 +168,7 @@ public class MachineWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bootSettingsButtonActionPerformed
 
     private void bootButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bootButtonActionPerformed
-        bootButton.setEnabled(false);
-        bootSettingsButton.setEnabled(false);
-        stepButton.setEnabled(true);
-        runButton.setEnabled(true);
-        stopButton.setEnabled(true);
+        
         
         machine.startAndBoot();
     }//GEN-LAST:event_bootButtonActionPerformed
@@ -163,9 +178,7 @@ public class MachineWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_stepButtonActionPerformed
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-        runButton.setEnabled(false);
-        stepButton.setEnabled(false);
-        pauseButton.setEnabled(true);
+        
         
         new SwingWorker<Void, Void>() {
             @Override
@@ -187,12 +200,7 @@ public class MachineWindow extends javax.swing.JFrame {
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
         // TODO add your handling code here:
-        bootButton.setEnabled(true);
-        bootSettingsButton.setEnabled(true);
-        stepButton.setEnabled(false);
-        runButton.setEnabled(false);
-        pauseButton.setEnabled(false);
-        stopButton.setEnabled(false);
+        
         
         machine.stop();
     }//GEN-LAST:event_stopButtonActionPerformed
@@ -283,6 +291,38 @@ public class MachineWindow extends javax.swing.JFrame {
     protected volatile Machine machine;
 
 
+    private void changeState(PropertyChangeEvent e) {
+        if (e.getPropertyName() != "state") {
+            return;
+        }
+        
+        switch ((Machine.State)e.getNewValue()) {
+            case IDLE:
+                bootButton.setEnabled(false);
+                bootSettingsButton.setEnabled(false);
+                stepButton.setEnabled(true);
+                runButton.setEnabled(true);
+                pauseButton.setEnabled(false);
+                stopButton.setEnabled(true);
+                break;
+                
+            case RUNNING:
+                runButton.setEnabled(false);
+                stepButton.setEnabled(false);
+                pauseButton.setEnabled(true);
+                break;
+                
+                
+            case STOPPED:
+                bootButton.setEnabled(true);
+                bootSettingsButton.setEnabled(true);
+                stepButton.setEnabled(false);
+                runButton.setEnabled(false);
+                pauseButton.setEnabled(false);
+                stopButton.setEnabled(false);
+                break;
+        }
+    }
 
 
 

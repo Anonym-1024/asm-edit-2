@@ -10,6 +10,6 @@ import java.beans.PropertyChangeListener;
  *
  * @author koukola
  */
-public interface EventEmmitor {
+public interface EventEmitter {
     void addListener(PropertyChangeListener l);
 }

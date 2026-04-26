@@ -4,15 +4,15 @@
  */
 package asmedit.machine;
 
-import asmedit.gui.EventEmmitor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import asmedit.gui.EventEmitter;
 
 /**
  *
  * @author koukola
  */
-public class ProgramCounter implements EventEmmitor  {
+public class ProgramCounter implements EventEmitter  {
     protected int content;
 
     PropertyChangeSupport pcs = new PropertyChangeSupport(this);

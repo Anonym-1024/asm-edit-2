@@ -4,37 +4,36 @@
  */
 package asmedit.machine;
 
+import asmedit.gui.EventEmitter;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.EventListener;
-import asmedit.gui.EventEmitter;
 
 /**
  *
  * @author koukola
  */
-public class Register implements EventEmitter {
-
+public class IOAddressRegister implements EventEmitter {
     protected int content;
     
-    
-    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-    
-    
-    public Register() {
+    public IOAddressRegister() {
+        this.pcs = new PropertyChangeSupport(this);
         this.content = 0;
     }
-
-    public int getContent() {
-        return content & 0xFF;
+    
+    
+    protected PropertyChangeSupport pcs;
+    
+    public void addListener(PropertyChangeListener l) {
+        this.pcs.addPropertyChangeListener(l);
     }
-
+    
+    public int getContent() {
+        return this.content;
+    }
+    
     public void setContent(int content) {
-        this.content = content & 0xFF;
+        this.content = content;
         pcs.firePropertyChange("content", null, content);
     }
     
-    public void addListener(PropertyChangeListener l) {
-        pcs.addPropertyChangeListener(l);
-    }
 }

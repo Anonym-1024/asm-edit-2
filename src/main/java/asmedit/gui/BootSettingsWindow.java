@@ -8,6 +8,8 @@ import asmedit.machine.MachineConfig;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -51,14 +53,16 @@ public class BootSettingsWindow extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         interruptAddress = new javax.swing.JSpinner();
-        memoryFile = new javax.swing.JTextField();
         checkBox = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
-        virtualMemoryFile = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         pageTableAddress = new javax.swing.JSpinner();
         okButton = new javax.swing.JButton();
+        chooseMemoryFile = new javax.swing.JButton();
+        chooseVirtualMemoryFile = new javax.swing.JButton();
+        virtualMemoryImageFile = new javax.swing.JLabel();
+        memoryImageFile = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -74,8 +78,6 @@ public class BootSettingsWindow extends javax.swing.JFrame {
         jLabel4.setText("Memory image file:");
         jLabel4.setEnabled(false);
 
-        virtualMemoryFile.setEnabled(false);
-
         jLabel5.setText("Page table addr.:");
         jLabel5.setEnabled(false);
 
@@ -83,6 +85,18 @@ public class BootSettingsWindow extends javax.swing.JFrame {
 
         okButton.setText("OK");
         okButton.addActionListener(this::okButtonActionPerformed);
+
+        chooseMemoryFile.setText("Choose");
+        chooseMemoryFile.addActionListener(this::chooseMemoryFileActionPerformed);
+
+        chooseVirtualMemoryFile.setText("Choose");
+        chooseVirtualMemoryFile.setEnabled(false);
+        chooseVirtualMemoryFile.addActionListener(this::chooseVirtualMemoryFileActionPerformed);
+
+        virtualMemoryImageFile.setText("Path...");
+        virtualMemoryImageFile.setEnabled(false);
+
+        memoryImageFile.setText("Path...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,6 +106,22 @@ public class BootSettingsWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(checkBox)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(okButton)
+                                    .addComponent(pageTableAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(chooseVirtualMemoryFile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(virtualMemoryImageFile, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3)
@@ -99,26 +129,14 @@ public class BootSettingsWindow extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(memoryFile)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(chooseMemoryFile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(memoryImageFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(bootAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(interruptAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 154, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkBox)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(virtualMemoryFile)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(okButton)
-                                    .addComponent(pageTableAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
@@ -133,10 +151,11 @@ public class BootSettingsWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(interruptAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(memoryFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chooseMemoryFile)
+                    .addComponent(memoryImageFile))
                 .addGap(4, 4, 4)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
@@ -144,14 +163,15 @@ public class BootSettingsWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(virtualMemoryFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chooseVirtualMemoryFile)
+                    .addComponent(virtualMemoryImageFile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(pageTableAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(okButton)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -163,12 +183,14 @@ public class BootSettingsWindow extends javax.swing.JFrame {
     
     private void checkBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxActionPerformed
         if (checkBox.isSelected()) {
-            virtualMemoryFile.setEnabled(true);
+            chooseVirtualMemoryFile.setEnabled(true);
+            virtualMemoryImageFile.setEnabled(true);
             pageTableAddress.setEnabled(true);
             jLabel4.setEnabled(true);
             jLabel5.setEnabled(true);
         } else {
-            virtualMemoryFile.setEnabled(false);
+            chooseVirtualMemoryFile.setEnabled(false);
+            virtualMemoryImageFile.setEnabled(false);
             pageTableAddress.setEnabled(false);
             jLabel4.setEnabled(false);
             jLabel5.setEnabled(false);
@@ -178,33 +200,63 @@ public class BootSettingsWindow extends javax.swing.JFrame {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         config.setBootAddress((Integer)bootAddress.getValue());
         config.setInterruptAddress((Integer)interruptAddress.getValue());
+        config.setPageTableAddress((Integer)pageTableAddress.getValue());
         
-        loadMemoryImages();
         
         
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
-    // TODO: make it safe
-    private void loadMemoryImages() {
-        config.setDefaultMemory(new byte[0]);
-        if ("" != memoryFile.getText()) {
-            File file = new File(memoryFile.getText());
-            byte[] fileContent = new byte[(int) file.length()];
+    private void chooseMemoryFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseMemoryFileActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.showOpenDialog(this);
+        
+        File f = fc.getSelectedFile();
+        byte[] fileContent = new byte[(int) f.length()];
 
-            try (FileInputStream fis = new FileInputStream(file)) {
-                int bytesRead = fis.read(fileContent);
-                
-            } catch (IOException e) {
-                return;
-            }
+        try (FileInputStream fis = new FileInputStream(f)) {
+            fis.read(fileContent);
             
             config.setDefaultMemory(fileContent);
-            
+     
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                null,
+                "",
+                "File Error",
+                JOptionPane.ERROR_MESSAGE
+            );
         }
         
         
-    }
+        this.memoryImageFile.setText(f.getPath());
+        
+    }//GEN-LAST:event_chooseMemoryFileActionPerformed
+
+    private void chooseVirtualMemoryFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseVirtualMemoryFileActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.showOpenDialog(this);
+        
+        File f = fc.getSelectedFile();
+        byte[] fileContent = new byte[(int) f.length()];
+
+        try (FileInputStream fis = new FileInputStream(f)) {
+            fis.read(fileContent);
+            
+            config.setDefaultVirtualMemory(fileContent);
+     
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                null,
+                "",
+                "File Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+        
+        this.virtualMemoryImageFile.setText(f.getPath());
+    }//GEN-LAST:event_chooseVirtualMemoryFileActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -234,6 +286,8 @@ public class BootSettingsWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner bootAddress;
     private javax.swing.JCheckBox checkBox;
+    private javax.swing.JButton chooseMemoryFile;
+    private javax.swing.JButton chooseVirtualMemoryFile;
     private javax.swing.JSpinner interruptAddress;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -241,9 +295,9 @@ public class BootSettingsWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField memoryFile;
+    private javax.swing.JLabel memoryImageFile;
     private javax.swing.JButton okButton;
     private javax.swing.JSpinner pageTableAddress;
-    private javax.swing.JTextField virtualMemoryFile;
+    private javax.swing.JLabel virtualMemoryImageFile;
     // End of variables declaration//GEN-END:variables
 }

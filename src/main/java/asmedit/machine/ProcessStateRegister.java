@@ -4,9 +4,9 @@
  */
 package asmedit.machine;
 
-import asmedit.gui.EventEmmitor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import asmedit.gui.EventEmitter;
 
 /*
  *
@@ -21,7 +21,7 @@ import java.beans.PropertyChangeSupport;
 |=====|=====|======|=====|=====|=====|=====|=====|
 */
 
-public class ProcessStateRegister implements EventEmmitor  {
+public class ProcessStateRegister implements EventEmitter  {
     int content;
 
     

@@ -16,7 +16,6 @@ public class TranslationTableGenerator {
         int pageCount = Math.ceilDiv(content.length, 256);
         
         int pageOffset = 512;
-        System.out.println(content.length);
         for (int i = 0; i < 256; i++) {
             
             if (i < pageCount) {

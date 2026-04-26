@@ -34,10 +34,30 @@ public class MachineConfig {
         this.defaultMemory = defaultMemory;
     }
 
+    public int getPageTableAddress() {
+        return pageTableAddress;
+    }
+
+    public void setPageTableAddress(int virtualMemoryAddress) {
+        this.pageTableAddress = virtualMemoryAddress;
+    }
+
+    public byte[] getDefaultVirtualMemory() {
+        return defaultVirtualMemory;
+    }
+
+    public void setDefaultVirtualMemory(byte[] defaultVirtualMemory) {
+        this.defaultVirtualMemory = defaultVirtualMemory;
+    }
+    
+    
+
     public MachineConfig() {
-        this.bootAddress = 0x1000;
+        this.bootAddress = 0x0000;
         this.interruptAddress = 0x0000;
+        this.pageTableAddress = 0x0000;
         this.defaultMemory = new byte[0];
+        this.defaultVirtualMemory = new byte[0];
     }
     
     
@@ -45,4 +65,8 @@ public class MachineConfig {
     protected int bootAddress;
     protected int interruptAddress;
     protected byte[] defaultMemory;
+    protected int pageTableAddress;
+    protected byte[] defaultVirtualMemory;
+    
+    
 }

@@ -6,6 +6,7 @@ package asmedit.machine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -30,6 +31,9 @@ public class Machine {
     
     protected PageTableBaseRegister ptbr;
     protected Memory memory;
+    
+    protected IOAddressRegister ioaddr;
+    protected IOInterface io;
     
     
     PropertyChangeSupport pcs = new PropertyChangeSupport(this);
@@ -62,6 +66,8 @@ public class Machine {
        this.ptbr = new PageTableBaseRegister();
        this.memory = new Memory();
        
+       this.ioaddr = new IOAddressRegister();
+       this.io = new IOInterface(this);
         
     }
 
@@ -108,6 +114,16 @@ public class Machine {
     public State getState() {
         return state;
     }
+
+    public IOAddressRegister getIoaddr() {
+        return ioaddr;
+    }
+
+    public IOInterface getIo() {
+        return io;
+    }
+
+    
     
     
     
@@ -138,10 +154,13 @@ public class Machine {
         
         memory.setBytes(0, config.defaultMemory);
         
+        memory.setBytes(config.pageTableAddress, config.defaultVirtualMemory);
+        
+        pcs.firePropertyChange("state", null, State.IDLE);
         state = State.IDLE;
         
-        pcs.firePropertyChange("state", -1, 1);
-        System.out.println("end");
+        
+       
     }
     
     
@@ -155,19 +174,19 @@ public class Machine {
     
     public void run() {
         state = State.RUNNING;
-        pcs.firePropertyChange("state", -1, 2);
+        pcs.firePropertyChange("state", null, State.RUNNING);
         while (state == State.RUNNING) {
             controlUnit.cycle();
         }
     }
     
     public void stop() {
-        pcs.firePropertyChange("state", -1, 0);
+        pcs.firePropertyChange("state", null, State.STOPPED);
         state = State.STOPPED;
     }
    
     public void pause() {
-        pcs.firePropertyChange("state", -1, 1);
+        pcs.firePropertyChange("state", null, State.IDLE);
         state = State.IDLE;
     }
     

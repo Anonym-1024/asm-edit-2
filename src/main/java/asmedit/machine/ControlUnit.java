@@ -111,7 +111,6 @@ public class ControlUnit {
     
     
     protected void execute(Instruction i) {
-        System.out.println(i.getOpcode());
         switch (i.getOpcode()) {
         case 0:  mov(i);    break;
         case 1:  mova(i);   break;
@@ -160,11 +159,12 @@ public class ControlUnit {
         case 44: csrd(i);   break;
         case 45: br(i);     break;
         case 46: brl(i);    break;
-        case 47: ptr(i);    break;
-        case 48: ptw(i);    break;
-        case 49: ptsr(i);   break;
-        case 50: svc(i);    break;
-        case 51: exit(i);   break;
+        case 47: ptaw(i);   break;
+        case 48: ptr(i);    break;
+        case 49: ptw(i);    break;
+        case 50: ptsr(i);   break;
+        case 51: svc(i);    break;
+        case 52: exit(i);   break;
         default:
             m.intr.setINI();
             
@@ -239,8 +239,7 @@ public class ControlUnit {
     
 
     protected int translateAddress(int addr) {
-        System.out.println("Addr: " + addr);
-        System.out.println("PTBR: " + m.ptbr.getContent() );
+        
         int pageTableEntryAddr = m.ptbr.getContent() << 9;
         pageTableEntryAddr |= (addr & 0xFF00) >> 7;
         
@@ -367,11 +366,9 @@ public class ControlUnit {
                 break;
             case 4:
                 m.ptbr.setByte0(src);
-                System.out.println("PTBR SET: " + src);
                 break;
             case 5:
                 m.ptbr.setByte1(src);
-                System.out.println("PTBR SET: " + src);
                 break;
         }
     }
@@ -722,7 +719,6 @@ public class ControlUnit {
             src = m.registers[i.getArg2()].getContent();
         }
         
-        System.out.println("shift: " + src);
         int res = ALU.lsl(src);
         
         dst.setContent(res);
@@ -741,7 +737,6 @@ public class ControlUnit {
         }
         
         int res = ALU.lsls(src, m.psr);
-        System.out.println("shift: " + src);
         
         dst.setContent(res);
     }
@@ -1100,25 +1095,45 @@ public class ControlUnit {
     }
 
     // --- Port / System I/O ---
-    public void ptr(Instruction i) {
-        if (m.psr.getState() > 1) {
-            // INTERRUPT INI????
-            return;
+    
+    public void ptaw(Instruction i) {
+        
+        int addr;
+        if (i.isI()) {
+            addr = i.getByte3();
+        } else {
+            addr = m.registers[i.getArg1()].getContent();
         }
+        
+         m.ioaddr.setContent(addr);
+        
+        
+    }
+    
+    public void ptr(Instruction i) {
+        int addr = m.ioaddr.getContent();
+        
+        int data = m.io.read(addr);
+        m.registers[i.getArg1()].setContent(data);
+        
     }
 
     public void ptw(Instruction i) {
-        if (m.psr.getState() > 1) {
-            // INTERRUPT INI????
-            return;
+        int data;
+        if (i.isI()) {
+            data = i.getByte3();
+        } else {
+            data = m.registers[i.getArg1()].getContent();
         }
+        
+        m.io.write(m.ioaddr.getContent(), data);
     }
 
     public void ptsr(Instruction i) {
-        if (m.psr.getState() > 1) {
-            // INTERRUPT INI????
-            return;
-        }
+        int addr = m.ioaddr.getContent();
+        
+        int data = m.io.readState(addr);
+        m.registers[i.getArg1()].setContent(data);
     }
 
     // --- System / Exit ---
@@ -1127,10 +1142,7 @@ public class ControlUnit {
     }
 
     public void exit(Instruction i) {
-        if (m.psr.getState() > 1) {
-            // INTERRUPT INI????
-            return;
-        }
+        
         m.stop();
         
     }
