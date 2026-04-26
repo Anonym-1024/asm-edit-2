@@ -28,7 +28,7 @@ public class ControlUnit {
     
     
     public void cycle() {
-        
+        //try {Thread.sleep(10);} catch (Exception e) {}
         if (m.psr.getIRQM() == 1 && m.intr.isIRQ()) {
             m.intr.setINT();
         } 
@@ -1074,7 +1074,8 @@ public class ControlUnit {
         
         
         
-        Register link = m.registers[i.getArg1()];
+        Register link0 = m.registers[i.getArg1()];
+        Register link1 = m.registers[(i.getArg1() + 1) % 16];
         
         int addr = 0;
         if (i.isI()) {
@@ -1086,10 +1087,12 @@ public class ControlUnit {
         }
         
         if (m.intr.isInterrupt()) {
-            link.setContent(m.intpc.getContent());
+            link0.setContent(m.intpc.getContent() & 0xFF);
+            link1.setContent((m.intpc.getContent() & 0xFF00) >> 8);
             m.intpc.setContent(addr);
         } else {
-            link.setContent(m.pc.getContent());
+            link0.setContent(m.pc.getContent() & 0xFF);
+            link1.setContent((m.pc.getContent() & 0xFF00) >> 8);
             m.pc.setContent(addr);
         }
     }
