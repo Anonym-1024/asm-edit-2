@@ -7,6 +7,7 @@ package asmedit.gui;
 import asmedit.machine.devices.ConsoleDevice;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
+import javax.swing.text.Caret;
 import javax.swing.text.DefaultCaret;
 
 /**
@@ -28,7 +29,9 @@ public class ConsoleDeviceWindow extends javax.swing.JFrame {
         initComponents();
         
         textArea.setEditable(false);
-               
+        DefaultCaret c = new DefaultCaret();
+        
+        
         this.dev = d;
         dev.addListener(e -> appendLetter(e));
         

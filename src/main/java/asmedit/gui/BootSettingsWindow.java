@@ -32,9 +32,17 @@ public class BootSettingsWindow extends javax.swing.JFrame {
     }
     
     public BootSettingsWindow(MachineConfig config) {
-        this.config = config;
+        
         initComponents();
         
+        this.config = config;
+        this.bootAddress.setValue(config.getBootAddress());
+        this.interruptAddress.setValue(config.getInterruptAddress());
+        this.memoryImageFile.setText(config.getDefaultMemoryFile());
+        this.virtualMemoryImageFile.setText(config.getDefaultVirtualMemoryFile());
+        this.pageTableAddress.setValue(config.getPageTableAddress());
+        this.checkBox.setSelected(!config.getDefaultVirtualMemoryFile().equals(""));
+        checkBoxActionPerformed(null);
         
         
     }
@@ -212,21 +220,12 @@ public class BootSettingsWindow extends javax.swing.JFrame {
         fc.showOpenDialog(this);
         
         File f = fc.getSelectedFile();
-        byte[] fileContent = new byte[(int) f.length()];
+        
 
-        try (FileInputStream fis = new FileInputStream(f)) {
-            fis.read(fileContent);
-            
-            config.setDefaultMemory(fileContent);
+        
+        config.setDefaultMemoryFile(f.getPath());
      
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(
-                null,
-                "",
-                "File Error",
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
+        
         
         
         this.memoryImageFile.setText(f.getPath());
@@ -238,21 +237,12 @@ public class BootSettingsWindow extends javax.swing.JFrame {
         fc.showOpenDialog(this);
         
         File f = fc.getSelectedFile();
-        byte[] fileContent = new byte[(int) f.length()];
+        
 
-        try (FileInputStream fis = new FileInputStream(f)) {
-            fis.read(fileContent);
+        
             
-            config.setDefaultVirtualMemory(fileContent);
+        config.setDefaultVirtualMemoryFile(f.getPath());
      
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(
-                null,
-                "",
-                "File Error",
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
         
         this.virtualMemoryImageFile.setText(f.getPath());
     }//GEN-LAST:event_chooseVirtualMemoryFileActionPerformed

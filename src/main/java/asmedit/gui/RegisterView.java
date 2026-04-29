@@ -32,7 +32,7 @@ public class RegisterView extends JPanel {
     
     
     // TODO: replace event emmitter with register inteface 
-    public RegisterView(String registerName, EventEmitter r) {
+    public RegisterView(String registerName, RegisterModel r) {
         this.registerName = registerName;
         this.content = 0;
         

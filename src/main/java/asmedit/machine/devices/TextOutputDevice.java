@@ -15,6 +15,11 @@ import java.beans.PropertyChangeSupport;
 public class TextOutputDevice extends Device {
 
     
+    public String getName() {
+        return "Text output";
+    }
+
+    
     protected PropertyChangeSupport pcs;
 
     public TextOutputDevice() {

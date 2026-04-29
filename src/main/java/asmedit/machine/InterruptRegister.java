@@ -6,7 +6,7 @@ package asmedit.machine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import asmedit.gui.EventEmitter;
+import asmedit.gui.RegisterModel;
 
 /**
  *
@@ -21,7 +21,7 @@ import asmedit.gui.EventEmitter;
 |=====|=====|======|=====|=====|=====|=====|=====|
 */
 
-public class InterruptRegister implements EventEmitter  {
+public class InterruptRegister implements RegisterModel  {
     protected int content;
     
     PropertyChangeSupport pcs = new PropertyChangeSupport(this);

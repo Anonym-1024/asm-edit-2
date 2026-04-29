@@ -14,6 +14,11 @@ import asmedit.machine.InterruptRegister;
 public class KeyboardDevice extends Device{
 
     
+    public String getName() {
+        return "Keyboard";
+    }
+
+    
     public KeyboardDevice() {
         super();
     }

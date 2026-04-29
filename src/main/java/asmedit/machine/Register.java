@@ -7,13 +7,13 @@ package asmedit.machine;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.EventListener;
-import asmedit.gui.EventEmitter;
+import asmedit.gui.RegisterModel;
 
 /**
  *
  * @author koukola
  */
-public class Register implements EventEmitter {
+public class Register implements RegisterModel {
 
     protected int content;
     

@@ -28,7 +28,7 @@ public class ControlUnit {
     
     
     public void cycle() {
-        //try {Thread.sleep(10);} catch (Exception e) {}
+        try {Thread.sleep(5);} catch (Exception e) {}
         if (m.psr.getIRQM() == 1 && m.intr.isIRQ()) {
             m.intr.setINT();
         } 
@@ -67,7 +67,7 @@ public class ControlUnit {
             }
         }
      
-        byte byte0 = m.memory.getByte(addr);
+        int byte0 = m.memory.getByte(addr);
         
         addr = base_addr + 1;
         if (m.psr.getState() != 0 && !m.intr.isInterrupt()) {
@@ -76,7 +76,7 @@ public class ControlUnit {
                 return null;
             }
         }
-        byte byte1 = m.memory.getByte(addr);
+        int byte1 = m.memory.getByte(addr);
         
         addr = base_addr + 2;
         if (m.psr.getState() != 0 && !m.intr.isInterrupt()) {
@@ -85,7 +85,7 @@ public class ControlUnit {
                 return null;
             }
         }
-        byte byte2 = m.memory.getByte(addr);
+        int byte2 = m.memory.getByte(addr);
         
         addr = base_addr + 3;
         if (m.psr.getState() != 0 && !m.intr.isInterrupt()) {
@@ -94,7 +94,7 @@ public class ControlUnit {
                 return null;
             }
         }
-        byte byte3 = m.memory.getByte(addr);
+        int byte3 = m.memory.getByte(addr);
         
         
         if (m.intr.isInterrupt()) {
@@ -1066,6 +1066,7 @@ public class ControlUnit {
         } else {
             m.pc.setContent(addr);
         }
+        
         
         
     }

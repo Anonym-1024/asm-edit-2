@@ -4,6 +4,7 @@
  */
 package asmedit.gui;
 
+import asmedit.machine.Device;
 import asmedit.machine.Machine;
 import asmedit.machine.Register;
 import asmedit.machine.devices.ConsoleDevice;
@@ -16,8 +17,10 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
+import javax.swing.JMenuItem;
 import javax.swing.SwingWorker;
 import javax.swing.text.DefaultCaret;
 
@@ -49,6 +52,7 @@ public class MachineWindow extends javax.swing.JFrame {
         
         initGeneralRegisters();
         initSystemGeneralRegisters();
+        initDevicesMenu();
         
         
         
@@ -65,6 +69,7 @@ public class MachineWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        addDeviceMenu = new javax.swing.JPopupMenu();
         registersPanel = new javax.swing.JPanel();
         systemRegistersPanel = new javax.swing.JPanel();
         bootSettingsButton = new javax.swing.JButton();
@@ -73,6 +78,7 @@ public class MachineWindow extends javax.swing.JFrame {
         runButton = new javax.swing.JButton();
         pauseButton = new javax.swing.JButton();
         stopButton = new javax.swing.JButton();
+        addDeviceButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,13 +126,18 @@ public class MachineWindow extends javax.swing.JFrame {
         stopButton.setEnabled(false);
         stopButton.addActionListener(this::stopButtonActionPerformed);
 
+        addDeviceButton.setText("Add device");
+        addDeviceButton.addActionListener(this::addDeviceButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(bootSettingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bootSettingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addDeviceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bootButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -148,16 +159,19 @@ public class MachineWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(bootSettingsButton)
-                        .addComponent(bootButton)
-                        .addComponent(stepButton)
-                        .addComponent(runButton)
-                        .addComponent(pauseButton)
-                        .addComponent(stopButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bootSettingsButton)
+                            .addComponent(bootButton)
+                            .addComponent(stepButton)
+                            .addComponent(runButton)
+                            .addComponent(pauseButton)
+                            .addComponent(stopButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addDeviceButton))
                     .addComponent(registersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(systemRegistersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
@@ -205,6 +219,12 @@ public class MachineWindow extends javax.swing.JFrame {
         machine.stop();
     }//GEN-LAST:event_stopButtonActionPerformed
 
+    private void addDeviceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addDeviceButtonActionPerformed
+        
+        
+        addDeviceMenu.show(addDeviceButton, 10, 20);
+    }//GEN-LAST:event_addDeviceButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -232,6 +252,8 @@ public class MachineWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addDeviceButton;
+    private javax.swing.JPopupMenu addDeviceMenu;
     private javax.swing.JButton bootButton;
     private javax.swing.JButton bootSettingsButton;
     private javax.swing.JButton pauseButton;
@@ -284,9 +306,33 @@ public class MachineWindow extends javax.swing.JFrame {
         systemRegistersPanel.add(ptbr);
         
         
+        RegisterView ioaddr = new RegisterView("ioaddr", machine.getIoaddr());
+        
+        systemRegistersPanel.add(ioaddr);
+        
+        
        
     }
 
+    
+    private void initDevicesMenu() {
+        for (Class<Device> devClass: Device.devices) {
+            
+            
+            JMenuItem item = new JMenuItem(devClass.getSimpleName());
+            item.addActionListener(e -> {
+                try {
+                    Device dev = devClass.getDeclaredConstructor().newInstance();
+                    machine.getIo().addDevice(dev);
+                } catch (Exception exc) {
+                    
+                }
+               
+                
+            });
+            addDeviceMenu.add(item);
+        }
+    }
     
     protected volatile Machine machine;
 

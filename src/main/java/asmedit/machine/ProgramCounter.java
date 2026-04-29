@@ -6,13 +6,13 @@ package asmedit.machine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import asmedit.gui.EventEmitter;
+import asmedit.gui.RegisterModel;
 
 /**
  *
  * @author koukola
  */
-public class ProgramCounter implements EventEmitter  {
+public class ProgramCounter implements RegisterModel  {
     protected int content;
 
     PropertyChangeSupport pcs = new PropertyChangeSupport(this);

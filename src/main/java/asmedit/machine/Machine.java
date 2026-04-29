@@ -6,8 +6,11 @@ package asmedit.machine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -152,9 +155,9 @@ public class Machine {
         
         ptbr.setContent(0);
         
-        memory.setBytes(0, config.defaultMemory);
+        memory.setBytes(0, readFileContent(config.getDefaultMemoryFile()));
         
-        memory.setBytes(config.pageTableAddress, config.defaultVirtualMemory);
+        memory.setBytes(config.pageTableAddress, readFileContent(config.getDefaultVirtualMemoryFile()));
         
         pcs.firePropertyChange("state", null, State.IDLE);
         state = State.IDLE;
@@ -163,6 +166,23 @@ public class Machine {
        
     }
     
+    
+    private byte[] readFileContent(String path) {
+        
+        if (path.equals("")) {
+            return new byte[0];
+        }
+        
+        File f = new File(path);
+        
+        try (FileInputStream str = new FileInputStream(f)) {
+            return str.readAllBytes();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred while reading '" + path + "'.");
+            return new byte[0];
+        }
+        
+    }
     
     
     

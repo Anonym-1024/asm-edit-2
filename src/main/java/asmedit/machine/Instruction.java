@@ -12,12 +12,12 @@ import java.util.function.BiConsumer;
  * @author koukola
  */
 public class Instruction {
-    byte byte0;
-    byte byte1;
-    byte byte2;
-    byte byte3;
+    int byte0;
+    int byte1;
+    int byte2;
+    int byte3;
     
-    public Instruction(byte byte0, byte byte1, byte byte2, byte byte3) {
+    public Instruction(int byte0, int byte1, int byte2, int byte3) {
         this.byte0 = byte0;
         this.byte1 = byte1;
         this.byte2 = byte2;

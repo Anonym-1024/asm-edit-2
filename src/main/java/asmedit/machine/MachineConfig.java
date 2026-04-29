@@ -26,13 +26,23 @@ public class MachineConfig {
         this.interruptAddress = interruptAddress;
     }
 
-    public byte[] getDefaultMemory() {
-        return defaultMemory;
+    public String getDefaultMemoryFile() {
+        return defaultMemoryFile;
     }
 
-    public void setDefaultMemory(byte[] defaultMemory) {
-        this.defaultMemory = defaultMemory;
+    public void setDefaultMemoryFile(String defaultMemoryFile) {
+        this.defaultMemoryFile = defaultMemoryFile;
     }
+
+    public String getDefaultVirtualMemoryFile() {
+        return defaultVirtualMemoryFile;
+    }
+
+    public void setDefaultVirtualMemoryFile(String defaultVirtualMemoryFile) {
+        this.defaultVirtualMemoryFile = defaultVirtualMemoryFile;
+    }
+
+    
 
     public int getPageTableAddress() {
         return pageTableAddress;
@@ -42,13 +52,7 @@ public class MachineConfig {
         this.pageTableAddress = virtualMemoryAddress;
     }
 
-    public byte[] getDefaultVirtualMemory() {
-        return defaultVirtualMemory;
-    }
-
-    public void setDefaultVirtualMemory(byte[] defaultVirtualMemory) {
-        this.defaultVirtualMemory = defaultVirtualMemory;
-    }
+    
     
     
 
@@ -56,17 +60,17 @@ public class MachineConfig {
         this.bootAddress = 0x0000;
         this.interruptAddress = 0x0000;
         this.pageTableAddress = 0x0000;
-        this.defaultMemory = new byte[0];
-        this.defaultVirtualMemory = new byte[0];
+        this.defaultMemoryFile = "";
+        this.defaultVirtualMemoryFile = "";
     }
     
     
     
     protected int bootAddress;
     protected int interruptAddress;
-    protected byte[] defaultMemory;
+    protected String defaultMemoryFile;
     protected int pageTableAddress;
-    protected byte[] defaultVirtualMemory;
+    protected String defaultVirtualMemoryFile;
     
     
 }

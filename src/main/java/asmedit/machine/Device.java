@@ -4,6 +4,9 @@
  */
 package asmedit.machine;
 
+import asmedit.machine.devices.ConsoleDevice;
+import asmedit.machine.devices.KeyboardDevice;
+import asmedit.machine.devices.TextOutputDevice;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -56,6 +59,12 @@ public abstract class Device {
         state = 0;
         
     }
+    
+    
+    public abstract String getName();
+    
+    
+    public static Class<Device>[] devices = new Class[] {ConsoleDevice.class, TextOutputDevice.class, KeyboardDevice.class};
     
     
 }

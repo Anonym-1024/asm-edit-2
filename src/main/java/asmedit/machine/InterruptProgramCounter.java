@@ -6,13 +6,13 @@ package asmedit.machine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import asmedit.gui.EventEmitter;
+import asmedit.gui.RegisterModel;
 
 /**
  *
  * @author koukola
  */
-public class InterruptProgramCounter implements EventEmitter  {
+public class InterruptProgramCounter implements RegisterModel  {
     protected int content;
     protected int defaultAddress;
     

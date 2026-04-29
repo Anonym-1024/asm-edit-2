@@ -4,7 +4,7 @@
  */
 package asmedit.machine;
 
-import asmedit.gui.EventEmitter;
+import asmedit.gui.RegisterModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -12,7 +12,7 @@ import java.beans.PropertyChangeSupport;
  *
  * @author koukola
  */
-public class IOAddressRegister implements EventEmitter {
+public class IOAddressRegister implements RegisterModel {
     protected int content;
     
     public IOAddressRegister() {

@@ -15,6 +15,11 @@ import java.beans.PropertyChangeSupport;
 public class ConsoleDevice extends Device {
 
     
+    public String getName() {
+        return "Console";
+    }
+
+    
     
     public ConsoleDevice() {
         this.pcs = new PropertyChangeSupport(this);

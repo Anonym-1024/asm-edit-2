@@ -6,13 +6,12 @@ package asmedit.machine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import asmedit.gui.EventEmitter;
 
 /**
  *
  * @author koukola
  */
-public class Memory implements EventEmitter  {
+public class Memory  {
     
     protected byte[] content;
     protected int size;
@@ -60,9 +59,9 @@ public class Memory implements EventEmitter  {
         pcs.firePropertyChange("content", null, content);
     }
     
-    public byte getByte(int addr) {
+    public int getByte(int addr) {
         if (addr < content.length) {
-            return content[addr];
+            return content[addr] & 0xFF;
         }
         return 0;
     }
