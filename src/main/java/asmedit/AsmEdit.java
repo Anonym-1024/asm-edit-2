@@ -7,7 +7,7 @@ package asmedit;
 
 
 import asmedit.gui.BootSettingsWindow;
-import asmedit.gui.KeyboardDeviceWindow;
+import asmedit.gui.devices.KeyboardDeviceWindow;
 import asmedit.gui.MachineWindow;
 import asmedit.gui.RegisterView;
 import asmedit.machine.Machine;

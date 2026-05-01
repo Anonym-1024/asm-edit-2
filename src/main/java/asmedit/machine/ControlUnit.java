@@ -28,7 +28,7 @@ public class ControlUnit {
     
     
     public void cycle() {
-        try {Thread.sleep(5);} catch (Exception e) {}
+        try {Thread.sleep(20);} catch (Exception e) {}
         if (m.psr.getIRQM() == 1 && m.intr.isIRQ()) {
             m.intr.setINT();
         } 
@@ -67,7 +67,7 @@ public class ControlUnit {
             }
         }
      
-        int byte0 = m.memory.getByte(addr);
+        int byte0 = m.memory.readByte(addr);
         
         addr = base_addr + 1;
         if (m.psr.getState() != 0 && !m.intr.isInterrupt()) {
@@ -76,7 +76,7 @@ public class ControlUnit {
                 return null;
             }
         }
-        int byte1 = m.memory.getByte(addr);
+        int byte1 = m.memory.readByte(addr);
         
         addr = base_addr + 2;
         if (m.psr.getState() != 0 && !m.intr.isInterrupt()) {
@@ -85,7 +85,7 @@ public class ControlUnit {
                 return null;
             }
         }
-        int byte2 = m.memory.getByte(addr);
+        int byte2 = m.memory.readByte(addr);
         
         addr = base_addr + 3;
         if (m.psr.getState() != 0 && !m.intr.isInterrupt()) {
@@ -94,7 +94,7 @@ public class ControlUnit {
                 return null;
             }
         }
-        int byte3 = m.memory.getByte(addr);
+        int byte3 = m.memory.readByte(addr);
         
         
         if (m.intr.isInterrupt()) {
@@ -244,8 +244,8 @@ public class ControlUnit {
         pageTableEntryAddr |= (addr & 0xFF00) >> 7;
         
         int pageTableEntry = 0;
-        pageTableEntry |= (m.memory.getByte(pageTableEntryAddr) & 0xFF);
-        pageTableEntry |= (m.memory.getByte(pageTableEntryAddr + 1) & 0xFF) << 8;
+        pageTableEntry |= (m.memory.readByte(pageTableEntryAddr) & 0xFF);
+        pageTableEntry |= (m.memory.readByte(pageTableEntryAddr + 1) & 0xFF) << 8;
         
         // Not allocated
         if ((pageTableEntry & 0x1000) != 0x1000) {
@@ -431,7 +431,7 @@ public class ControlUnit {
             }
         }
         
-        int read = m.memory.getByte(addr);
+        int read = m.memory.readByte(addr);
         dst.setContent(read);
     }
 
@@ -458,7 +458,7 @@ public class ControlUnit {
         
         
         int src = m.registers[i.getArg1()].getContent();
-        m.memory.setByte(addr, (byte)src);
+        m.memory.writeByte(addr, (byte)src);
     }
 
     // --- Arithmetic ---

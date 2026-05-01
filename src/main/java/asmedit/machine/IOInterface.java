@@ -52,4 +52,8 @@ public class IOInterface {
         devs.get(addr).write(content);
     }
     
+    public void removeAllDevices() {
+        this.devs.clear();
+    }
+    
 }

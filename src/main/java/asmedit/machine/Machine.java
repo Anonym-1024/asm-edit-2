@@ -159,6 +159,8 @@ public class Machine {
         
         memory.setBytes(config.pageTableAddress, readFileContent(config.getDefaultVirtualMemoryFile()));
         
+        io.removeAllDevices();
+        
         pcs.firePropertyChange("state", null, State.IDLE);
         state = State.IDLE;
         

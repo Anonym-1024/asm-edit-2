@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package asmedit.gui;
+package asmedit.gui.devices;
 
 import asmedit.machine.devices.ConsoleDevice;
 import java.awt.event.FocusEvent;
@@ -29,7 +29,6 @@ public class ConsoleDeviceWindow extends javax.swing.JFrame {
         initComponents();
         
         textArea.setEditable(false);
-        DefaultCaret c = new DefaultCaret();
         
         
         this.dev = d;
@@ -53,7 +52,12 @@ public class ConsoleDeviceWindow extends javax.swing.JFrame {
         scrollPane = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -106,6 +110,10 @@ public class ConsoleDeviceWindow extends javax.swing.JFrame {
     private void textAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyPressed
         dev.setKeyRegister(evt.getKeyCode());
     }//GEN-LAST:event_textAreaKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowClosing
 
     
     

@@ -4,6 +4,8 @@
  */
 package asmedit.gui;
 
+import asmedit.gui.devices.ConsoleDeviceWindow;
+import asmedit.gui.devices.DeviceFactory;
 import asmedit.machine.Device;
 import asmedit.machine.Machine;
 import asmedit.machine.Register;
@@ -39,14 +41,8 @@ public class MachineWindow extends javax.swing.JFrame {
         
         this.machine = new Machine();
         this.machine.addListener(e -> changeState(e));
-        
-        ConsoleDevice dev = new ConsoleDevice();
-        
-        this.machine.getIo().addDevice(dev);
-        
-        
-        new ConsoleDeviceWindow(dev).setVisible(true);
-        
+          
+        this.memWindow = new MemoryWindow(machine.getMemory());
         
         initComponents();
         
@@ -54,10 +50,7 @@ public class MachineWindow extends javax.swing.JFrame {
         initSystemGeneralRegisters();
         initDevicesMenu();
         
-        
-        
-        
-        
+  
     }
 
     /**
@@ -79,8 +72,9 @@ public class MachineWindow extends javax.swing.JFrame {
         pauseButton = new javax.swing.JButton();
         stopButton = new javax.swing.JButton();
         addDeviceButton = new javax.swing.JButton();
+        showMemoryButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout registersPanelLayout = new javax.swing.GroupLayout(registersPanel);
         registersPanel.setLayout(registersPanelLayout);
@@ -129,25 +123,33 @@ public class MachineWindow extends javax.swing.JFrame {
         addDeviceButton.setText("Add device");
         addDeviceButton.addActionListener(this::addDeviceButtonActionPerformed);
 
+        showMemoryButton.setText("Show memory");
+        showMemoryButton.addActionListener(this::showMemoryButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bootSettingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(addDeviceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bootButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(runButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pauseButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(bootSettingsButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bootButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(runButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pauseButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(showMemoryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                            .addComponent(addDeviceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(systemRegistersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -167,8 +169,10 @@ public class MachineWindow extends javax.swing.JFrame {
                             .addComponent(runButton)
                             .addComponent(pauseButton)
                             .addComponent(stopButton))
+                        .addGap(52, 52, 52)
+                        .addComponent(addDeviceButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addDeviceButton))
+                        .addComponent(showMemoryButton))
                     .addComponent(registersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(systemRegistersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(30, Short.MAX_VALUE))
@@ -225,6 +229,11 @@ public class MachineWindow extends javax.swing.JFrame {
         addDeviceMenu.show(addDeviceButton, 10, 20);
     }//GEN-LAST:event_addDeviceButtonActionPerformed
 
+    private void showMemoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showMemoryButtonActionPerformed
+        
+        memWindow.setVisible(true);
+    }//GEN-LAST:event_showMemoryButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -259,6 +268,7 @@ public class MachineWindow extends javax.swing.JFrame {
     private javax.swing.JButton pauseButton;
     private javax.swing.JPanel registersPanel;
     private javax.swing.JButton runButton;
+    private javax.swing.JButton showMemoryButton;
     private javax.swing.JButton stepButton;
     private javax.swing.JButton stopButton;
     private javax.swing.JPanel systemRegistersPanel;
@@ -316,18 +326,16 @@ public class MachineWindow extends javax.swing.JFrame {
 
     
     private void initDevicesMenu() {
-        for (Class<Device> devClass: Device.devices) {
+        for (DeviceFactory factory: DeviceFactory.factories) {
             
             
-            JMenuItem item = new JMenuItem(devClass.getSimpleName());
+            JMenuItem item = new JMenuItem(factory.getName());
             item.addActionListener(e -> {
-                try {
-                    Device dev = devClass.getDeclaredConstructor().newInstance();
-                    machine.getIo().addDevice(dev);
-                } catch (Exception exc) {
-                    
-                }
-               
+                
+                Device dev = factory.newDevice();
+                machine.getIo().addDevice(dev);
+                factory.newWindow(dev).setVisible(true);
+                
                 
             });
             addDeviceMenu.add(item);
@@ -335,7 +343,7 @@ public class MachineWindow extends javax.swing.JFrame {
     }
     
     protected volatile Machine machine;
-
+    protected MemoryWindow memWindow;
 
     private void changeState(PropertyChangeEvent e) {
         if (e.getPropertyName() != "state") {

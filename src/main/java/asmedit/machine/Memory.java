@@ -56,14 +56,39 @@ public class Memory  {
         
         content[addr] = v;
         
+        
         pcs.firePropertyChange("content", null, content);
     }
     
     public int getByte(int addr) {
+        
         if (addr < content.length) {
+           
             return content[addr] & 0xFF;
         }
+        
         return 0;
+    }
+    
+    public int readByte(int addr) {
+        
+        if (addr < content.length) {
+            pcs.firePropertyChange("address", null, addr);
+            return content[addr] & 0xFF;
+        }
+        
+        return 0;
+    }
+    
+     public void writeByte(int addr, byte v) {
+        if (addr >= content.length) {
+            return;
+        }
+        
+        content[addr] = v;
+        
+        pcs.firePropertyChange("address", null, addr);
+        pcs.firePropertyChange("content", null, content);
     }
     
     public int getLength() {
@@ -77,6 +102,11 @@ public class Memory  {
     
     public void addListener(PropertyChangeListener l) {
         pcs.addPropertyChangeListener(l);
+    }
+    
+    
+    public void addListener(String s, PropertyChangeListener l) {
+        pcs.addPropertyChangeListener(s, l);
     }
     
     

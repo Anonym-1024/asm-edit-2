@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package asmedit.gui;
+package asmedit.gui.devices;
 
 import asmedit.machine.devices.TextOutputDevice;
 import java.beans.PropertyChangeEvent;
@@ -46,7 +46,7 @@ public class TextOutputDeviceWindow extends javax.swing.JFrame {
         textArea = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         textArea.setColumns(20);
         textArea.setRows(5);
