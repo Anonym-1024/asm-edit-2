@@ -80,7 +80,18 @@ public class Memory  {
         return 0;
     }
     
-     public void writeByte(int addr, byte v) {
+    
+    public int readInstructionByte(int addr) {
+        
+        if (addr < content.length) {
+            pcs.firePropertyChange("pcaddress", null, addr);
+            return content[addr] & 0xFF;
+        }
+        
+        return 0;
+    }
+    
+    public void writeByte(int addr, byte v) {
         if (addr >= content.length) {
             return;
         }
@@ -88,6 +99,18 @@ public class Memory  {
         content[addr] = v;
         
         pcs.firePropertyChange("address", null, addr);
+        pcs.firePropertyChange("content", null, content);
+    }
+    
+    
+    public void writeInstructionByte(int addr, byte v) {
+        if (addr >= content.length) {
+            return;
+        }
+        
+        content[addr] = v;
+        
+        pcs.firePropertyChange("pcaddress", null, addr);
         pcs.firePropertyChange("content", null, content);
     }
     

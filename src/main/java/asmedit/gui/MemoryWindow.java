@@ -21,6 +21,7 @@ public class MemoryWindow extends JFrame {
     private final JTable table;
     private final MemoryTableModel model;
     private int highlightedAddress = -1;
+    private int pcHighlightAddress = -1;
 
     public MemoryWindow(Memory memory) {
         super("Memory Viewer");
@@ -41,6 +42,7 @@ public class MemoryWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         memory.addListener("address", e -> addressChanged(e));
+        memory.addListener("pcaddress", e -> pcAddressChanged(e));
         
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
@@ -54,8 +56,21 @@ public class MemoryWindow extends JFrame {
         table.scrollRectToVisible(table.getCellRect(row, 0, true));
     }
     
+    protected void highlightPcAddress(int address) {
+        this.pcHighlightAddress = address;
+        model.fireTableDataChanged(); // Trigger a repaint
+        
+        // Optional: Auto-scroll to the highlighted address
+        int row = address / 16;
+        table.scrollRectToVisible(table.getCellRect(row, 0, true));
+    }
+    
     public void addressChanged(PropertyChangeEvent e) {
         this.highlightAddress((Integer)e.getNewValue());
+    }
+    
+    public void pcAddressChanged(PropertyChangeEvent e) {
+        this.highlightPcAddress((Integer)e.getNewValue());
     }
 
     // Inner class to handle custom cell colors
@@ -69,6 +84,9 @@ public class MemoryWindow extends JFrame {
             int currentAddr = (row * 16) + (col - 1);
             if (col > 0 && currentAddr == highlightedAddress) {
                 c.setBackground(Color.GREEN);
+                c.setForeground(Color.BLACK);
+            } else if (col > 0 && currentAddr == pcHighlightAddress) {
+                c.setBackground(Color.CYAN);
                 c.setForeground(Color.BLACK);
             } else {
                 c.setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
