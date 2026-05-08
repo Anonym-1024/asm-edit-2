@@ -272,7 +272,9 @@ public class EditorWindow extends javax.swing.JFrame {
 
     private void changeCompilerPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeCompilerPathButtonActionPerformed
         String path = JOptionPane.showInputDialog("Enter assembler file path:");
-        
+        if (path == null) {
+            return;
+        }
         this.props.setProperty("path", path);
         try (FileOutputStream s = new FileOutputStream(this.configFile)) {
             props.store(s, "Config");
@@ -317,13 +319,13 @@ public class EditorWindow extends javax.swing.JFrame {
                 
                 
             } else {
-                
+                return;
             }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Could not compile main.asm");
-            e.printStackTrace();
-            System.out.println(path);
+            
+            return;
         }
         
         
@@ -356,8 +358,7 @@ public class EditorWindow extends javax.swing.JFrame {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Could not link main.asm");
-            e.printStackTrace();
-            System.out.println(path);
+            return;
         }
         
         
