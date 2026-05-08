@@ -7,8 +7,10 @@ package asmedit;
 
 
 import asmedit.gui.BootSettingsWindow;
+import asmedit.gui.EditorWindow;
 import asmedit.gui.devices.KeyboardDeviceWindow;
 import asmedit.gui.MachineWindow;
+import asmedit.gui.MainMenuWindow;
 import asmedit.gui.RegisterView;
 import asmedit.machine.Machine;
 import asmedit.machine.MachineConfig;
@@ -34,7 +36,7 @@ public class AsmEdit {
     public static void main(String[] args) {
         
         
-        MachineWindow.main(args);
+        MainMenuWindow.main(args);
         
         /*
         File file = new File("/Users/koukola/Documents/asm/resources/example");

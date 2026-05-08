@@ -4,6 +4,33 @@
  */
 package asmedit.gui;
 
+import asmedit.machine.Machine;
+import asmedit.machine.MachineConfig;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Properties;
+import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
+import javax.swing.text.Segment;
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMaker;
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.TokenMap;
+import org.fife.ui.rtextarea.RTextScrollPane;
+
 /**
  *
  * @author koukola
@@ -12,11 +39,115 @@ public class EditorWindow extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EditorWindow.class.getName());
 
+    protected File folder;
+    protected File mainFile;
+    protected File configFile;
+    protected Properties props;
+    protected MachineWindow mw;
+    
+    private RSyntaxTextArea textArea;
+    
+    
+    public EditorWindow(File folder) {
+        this.folder = folder;
+        
+        if (initProject() == false) {
+            this.dispose();
+            return;
+        }
+        
+        loadConfig();
+        
+        
+        initComponents();
+        
+        initTextArea();
+        
+        initMachineWindow();
+        
+    }
+    
+    
+    private void initMachineWindow() {
+        MachineConfig mc = new MachineConfig();
+        mc.setDefaultMemoryFile(new File(folder, "main.bin").getAbsolutePath());
+        
+        
+        Machine m = new Machine();
+        m.setConfig(mc);
+        
+        this.mw = new MachineWindow(m);
+        this.mw.setTitle("Machine - " + mainFile.getPath());
+    }
+    
+    private void initTextArea() {
+        this.textArea = new RSyntaxTextArea();
+        
+        try (FileReader s = new FileReader(mainFile)) {
+            textArea.setText(s.readAllAsString());
+        } catch (IOException e) {
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+       this.textAreaPanel.setLayout(new BoxLayout(textAreaPanel, BoxLayout.Y_AXIS));
+        this.textAreaPanel.add(new RTextScrollPane(this.textArea, true));
+        
+        
+        
+    }
+    
+    private boolean initProject() {
+        if (!folder.isDirectory()) {
+            JOptionPane.showMessageDialog(this, "Could not open directory.");
+            return false;
+        }
+        
+        this.mainFile = new File(folder, "main.asm");
+        
+        this.setTitle("Editor - " + mainFile.getPath());
+
+        
+        
+        
+        return true;
+    }
+    
+    private void loadConfig() {
+        this.configFile = new File(folder, "properties.cfg");
+        
+        
+        
+        
+        this.props = new Properties();
+
+        
+        
+        
+        
+        try (FileInputStream s = new FileInputStream(this.configFile)) {
+            props.load(s);
+        } catch (IOException e) {
+            
+            return;
+        }
+        
+        
+        
+        return;
+    }
+    
     /**
      * Creates new form EditorWindow
      */
-    public EditorWindow() {
+    private EditorWindow() {
         initComponents();
+        
     }
 
     /**
@@ -28,21 +159,217 @@ public class EditorWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        errorLine = new javax.swing.JLabel();
+        textAreaPanel = new javax.swing.JPanel();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu3 = new javax.swing.JMenu();
+        saveButton = new javax.swing.JMenuItem();
+        compileButton = new javax.swing.JMenuItem();
+        openInMachineButton = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        openProjectButton = new javax.swing.JMenuItem();
+        machineSimulationButton = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        changeCompilerPathButton = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
+
+        errorLine.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        errorLine.setForeground(new java.awt.Color(255, 0, 0));
+
+        javax.swing.GroupLayout textAreaPanelLayout = new javax.swing.GroupLayout(textAreaPanel);
+        textAreaPanel.setLayout(textAreaPanelLayout);
+        textAreaPanelLayout.setHorizontalGroup(
+            textAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        textAreaPanelLayout.setVerticalGroup(
+            textAreaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 426, Short.MAX_VALUE)
+        );
+
+        jMenu3.setText("File");
+
+        saveButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        saveButton.setText("Save");
+        saveButton.addActionListener(this::saveButtonActionPerformed);
+        jMenu3.add(saveButton);
+
+        compileButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        compileButton.setText("Compile");
+        compileButton.addActionListener(this::compileButtonActionPerformed);
+        jMenu3.add(compileButton);
+
+        openInMachineButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        openInMachineButton.setText("Open in a machine");
+        openInMachineButton.addActionListener(this::openInMachineButtonActionPerformed);
+        jMenu3.add(openInMachineButton);
+
+        jMenuBar2.add(jMenu3);
+
+        jMenu1.setText("Main menu");
+
+        openProjectButton.setText("Open project");
+        openProjectButton.addActionListener(this::openProjectButtonActionPerformed);
+        jMenu1.add(openProjectButton);
+
+        machineSimulationButton.setText("Machine simulation");
+        machineSimulationButton.addActionListener(this::machineSimulationButtonActionPerformed);
+        jMenu1.add(machineSimulationButton);
+
+        jMenuBar2.add(jMenu1);
+
+        jMenu2.setText("Settings");
+
+        changeCompilerPathButton.setText("Change compiler path");
+        changeCompilerPathButton.addActionListener(this::changeCompilerPathButtonActionPerformed);
+        jMenu2.add(changeCompilerPathButton);
+
+        jMenuBar2.add(jMenu2);
+
+        setJMenuBar(jMenuBar2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(errorLine, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                    .addComponent(textAreaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(textAreaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(errorLine, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+    }//GEN-LAST:event_formWindowClosed
+
+    private void openProjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openProjectButtonActionPerformed
+        MainMenuWindow.openProject();
+    }//GEN-LAST:event_openProjectButtonActionPerformed
+
+    private void machineSimulationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_machineSimulationButtonActionPerformed
+        MainMenuWindow.newMachineSimulation();
+    }//GEN-LAST:event_machineSimulationButtonActionPerformed
+
+    private void changeCompilerPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeCompilerPathButtonActionPerformed
+        String path = JOptionPane.showInputDialog("Enter assembler file path:");
+        
+        this.props.setProperty("path", path);
+        try (FileOutputStream s = new FileOutputStream(this.configFile)) {
+            props.store(s, "Config");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Could not write to a config file.");
+
+            return;
+        }
+    }//GEN-LAST:event_changeCompilerPathButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        try (FileWriter w = new FileWriter(mainFile)) {
+            w.write(textArea.getText());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Could not write to main.asm");
+        }
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void compileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileButtonActionPerformed
+        
+        String path = props.getProperty("path", "");
+        
+        ProcessBuilder compileProcess = new ProcessBuilder(path, "-c", "main.asm", "-o", "main.o");
+        compileProcess.directory(this.folder);
+        compileProcess.redirectErrorStream(true);
+        
+        try {
+            // Start the process
+            Process process = compileProcess.start();
+
+            // Read the output from the process's standard input stream
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
+                
+                errorLine.setText(reader.readAllAsString().replaceAll("\033\\[\\d+m", ""));
+            }
+
+            // Wait for the process to finish and get the exit code
+            int exitCode = process.waitFor();
+            
+            if (exitCode == 0) {
+                
+                
+            } else {
+                
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not compile main.asm");
+            e.printStackTrace();
+            System.out.println(path);
+        }
+        
+        
+        
+        
+        ProcessBuilder linkProcess = new ProcessBuilder(path, "-l", "main.o", "-o", "main.bin");
+        linkProcess.directory(this.folder);
+        linkProcess.redirectErrorStream(true);
+        
+        try {
+            // Start the process
+            Process process = linkProcess.start();
+
+            // Read the output from the process's standard input stream
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
+                
+                errorLine.setText(reader.readAllAsString().replaceAll("\033\\[\\d+m", ""));
+            }
+
+            // Wait for the process to finish and get the exit code
+            int exitCode = process.waitFor();
+            
+            if (exitCode == 0) {
+                JOptionPane.showMessageDialog(this, "Compilation OK");
+                
+            } else {
+                
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Could not link main.asm");
+            e.printStackTrace();
+            System.out.println(path);
+        }
+        
+        
+        
+    }//GEN-LAST:event_compileButtonActionPerformed
+
+    private void openInMachineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openInMachineButtonActionPerformed
+        
+        
+        
+        mw.setVisible(true);
+    }//GEN-LAST:event_openInMachineButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +397,18 @@ public class EditorWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem changeCompilerPathButton;
+    private javax.swing.JMenuItem compileButton;
+    private javax.swing.JLabel errorLine;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem machineSimulationButton;
+    private javax.swing.JMenuItem openInMachineButton;
+    private javax.swing.JMenuItem openProjectButton;
+    private javax.swing.JMenuItem saveButton;
+    private javax.swing.JPanel textAreaPanel;
     // End of variables declaration//GEN-END:variables
 }
+

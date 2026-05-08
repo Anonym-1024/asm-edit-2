@@ -13,6 +13,7 @@ import asmedit.machine.devices.ConsoleDevice;
 import asmedit.machine.devices.KeyboardDevice;
 import asmedit.machine.devices.TextOutputDevice;
 import asmedit.utils.TranslationTableGenerator;
+import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
@@ -34,6 +35,24 @@ public class MachineWindow extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MachineWindow.class.getName());
 
+    
+    public MachineWindow(Machine m) {
+        
+        this.machine = m;
+        this.machine.addListener(e -> changeState(e));
+          
+        this.memWindow = new MemoryWindow(machine.getMemory());
+        
+        initComponents();
+        
+        initGeneralRegisters();
+        initSystemGeneralRegisters();
+        initDevicesMenu();
+        
+  
+    }
+    
+    
     /**
      * Creates new form MachineWindow
      */
@@ -63,6 +82,8 @@ public class MachineWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         addDeviceMenu = new javax.swing.JPopupMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         registersPanel = new javax.swing.JPanel();
         systemRegistersPanel = new javax.swing.JPanel();
         bootSettingsButton = new javax.swing.JButton();
@@ -73,8 +94,24 @@ public class MachineWindow extends javax.swing.JFrame {
         stopButton = new javax.swing.JButton();
         addDeviceButton = new javax.swing.JButton();
         showMemoryButton = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        mainMenuButton = new javax.swing.JMenu();
+        openProjectButton = new javax.swing.JMenuItem();
+        machineSimulationButton = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
+
+        jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.GroupLayout registersPanelLayout = new javax.swing.GroupLayout(registersPanel);
         registersPanel.setLayout(registersPanelLayout);
@@ -126,6 +163,21 @@ public class MachineWindow extends javax.swing.JFrame {
         showMemoryButton.setText("Show memory");
         showMemoryButton.addActionListener(this::showMemoryButtonActionPerformed);
 
+        mainMenuButton.setText("Main menu");
+        mainMenuButton.addActionListener(this::mainMenuButtonActionPerformed);
+
+        openProjectButton.setText("Open project");
+        openProjectButton.addActionListener(this::openProjectButtonActionPerformed);
+        mainMenuButton.add(openProjectButton);
+
+        machineSimulationButton.setText("Machine simulation");
+        machineSimulationButton.addActionListener(this::machineSimulationButtonActionPerformed);
+        mainMenuButton.add(machineSimulationButton);
+
+        jMenuBar1.add(mainMenuButton);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -175,7 +227,7 @@ public class MachineWindow extends javax.swing.JFrame {
                         .addComponent(showMemoryButton))
                     .addComponent(registersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(systemRegistersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -234,6 +286,30 @@ public class MachineWindow extends javax.swing.JFrame {
         memWindow.setVisible(true);
     }//GEN-LAST:event_showMemoryButtonActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        memWindow.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void mainMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainMenuButtonActionPerformed
+        
+    }//GEN-LAST:event_mainMenuButtonActionPerformed
+
+    private void openProjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openProjectButtonActionPerformed
+        MainMenuWindow.openProject();
+    }//GEN-LAST:event_openProjectButtonActionPerformed
+
+    private void machineSimulationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_machineSimulationButtonActionPerformed
+        MainMenuWindow.newMachineSimulation();
+    }//GEN-LAST:event_machineSimulationButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -265,6 +341,12 @@ public class MachineWindow extends javax.swing.JFrame {
     private javax.swing.JPopupMenu addDeviceMenu;
     private javax.swing.JButton bootButton;
     private javax.swing.JButton bootSettingsButton;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem machineSimulationButton;
+    private javax.swing.JMenu mainMenuButton;
+    private javax.swing.JMenuItem openProjectButton;
     private javax.swing.JButton pauseButton;
     private javax.swing.JPanel registersPanel;
     private javax.swing.JButton runButton;
