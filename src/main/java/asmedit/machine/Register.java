@@ -6,7 +6,6 @@ package asmedit.machine;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.EventListener;
 import asmedit.gui.RegisterModel;
 
 /**

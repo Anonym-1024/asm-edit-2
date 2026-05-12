@@ -4,12 +4,12 @@
  */
 package asmedit.machine;
 
+
+import asmedit.utils.TranslationTableGenerator;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.JOptionPane;
 
 /**
@@ -157,8 +157,9 @@ public class Machine {
         
         memory.setBytes(0, readFileContent(config.getDefaultMemoryFile()));
         
-        memory.setBytes(config.pageTableAddress, readFileContent(config.getDefaultVirtualMemoryFile()));
-        
+        if (config.useVirtualMemory) {
+            memory.setBytes(config.pageTableAddress, TranslationTableGenerator.generate(readFileContent(config.getDefaultVirtualMemoryFile()), config.pageTableAddress));
+        }
         
         
         io.removeAllDevices();

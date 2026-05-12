@@ -6,10 +6,7 @@ package asmedit.gui;
 
 import asmedit.machine.Machine;
 import asmedit.machine.MachineConfig;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,17 +15,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.Properties;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.text.Segment;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMaker;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
-import org.fife.ui.rsyntaxtextarea.Token;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
-import org.fife.ui.rsyntaxtextarea.TokenMap;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 /**
@@ -90,13 +83,16 @@ public class EditorWindow extends javax.swing.JFrame {
         }
         
         
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_6502);
+        
+        textArea.setCodeFoldingEnabled(true);
         
         
         
         
         
        this.textAreaPanel.setLayout(new BoxLayout(textAreaPanel, BoxLayout.Y_AXIS));
-        this.textAreaPanel.add(new RTextScrollPane(this.textArea, true));
+       this.textAreaPanel.add(new RTextScrollPane(this.textArea, true));
         
         
         
@@ -271,11 +267,15 @@ public class EditorWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_machineSimulationButtonActionPerformed
 
     private void changeCompilerPathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeCompilerPathButtonActionPerformed
-        String path = JOptionPane.showInputDialog("Enter assembler file path:");
-        if (path == null) {
+        
+        JFileChooser fc = new JFileChooser();
+        
+        if (fc.showOpenDialog(this) == JFileChooser.CANCEL_OPTION) {
             return;
         }
-        this.props.setProperty("path", path);
+        
+        
+        this.props.setProperty("path", fc.getSelectedFile().getAbsolutePath());
         try (FileOutputStream s = new FileOutputStream(this.configFile)) {
             props.store(s, "Config");
         } catch (IOException e) {
@@ -308,7 +308,6 @@ public class EditorWindow extends javax.swing.JFrame {
             // Read the output from the process's standard input stream
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()))) {
-                
                 errorLine.setText(reader.readAllAsString().replaceAll("\033\\[\\d+m", ""));
             }
 
@@ -323,6 +322,7 @@ public class EditorWindow extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
+            errorLine.setForeground(Color.red);
             JOptionPane.showMessageDialog(this, "Could not compile main.asm");
             
             return;
@@ -343,6 +343,7 @@ public class EditorWindow extends javax.swing.JFrame {
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()))) {
                 
+                errorLine.setForeground(Color.red);
                 errorLine.setText(reader.readAllAsString().replaceAll("\033\\[\\d+m", ""));
             }
 
@@ -350,7 +351,8 @@ public class EditorWindow extends javax.swing.JFrame {
             int exitCode = process.waitFor();
             
             if (exitCode == 0) {
-                JOptionPane.showMessageDialog(this, "Compilation OK");
+                errorLine.setForeground(Color.black);
+                errorLine.setText("Compilation OK");
                 
             } else {
                 

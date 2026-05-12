@@ -4,15 +4,10 @@
  */
 package asmedit.gui;
 
-import asmedit.machine.Register;
-import java.awt.Component;
+
 import java.awt.Dimension;
-import java.awt.TextField;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

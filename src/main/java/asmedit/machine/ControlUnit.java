@@ -4,8 +4,6 @@
  */
 package asmedit.machine;
 
-import java.util.function.BiConsumer;
-import javax.sound.midi.Instrument;
 
 /**
  *

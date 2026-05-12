@@ -5,10 +5,7 @@
 package asmedit.gui.devices;
 
 import asmedit.machine.devices.ConsoleDevice;
-import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
-import javax.swing.text.Caret;
-import javax.swing.text.DefaultCaret;
 
 /**
  *

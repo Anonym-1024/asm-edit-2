@@ -94,8 +94,9 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="showMemoryButton" pref="144" max="32767" attributes="0"/>
                           <Component id="addDeviceButton" max="32767" attributes="0"/>
+                          <Component id="showMemoryButton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="removeDevicesButton" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -124,6 +125,8 @@
                       </Group>
                       <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                       <Component id="addDeviceButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="removeDevicesButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="showMemoryButton" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -232,6 +235,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showMemoryButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="removeDevicesButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Remove all devices"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeDevicesButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -4,8 +4,7 @@
  */
 package asmedit.machine;
 
-import java.lang.annotation.Annotation;
-import java.util.function.BiConsumer;
+
 
 /**
  *

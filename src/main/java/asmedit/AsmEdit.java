@@ -6,23 +6,8 @@ package asmedit;
 
 
 
-import asmedit.gui.BootSettingsWindow;
-import asmedit.gui.EditorWindow;
-import asmedit.gui.devices.KeyboardDeviceWindow;
-import asmedit.gui.MachineWindow;
 import asmedit.gui.MainMenuWindow;
-import asmedit.gui.RegisterView;
-import asmedit.machine.Machine;
-import asmedit.machine.MachineConfig;
-import asmedit.machine.Register;
-import asmedit.utils.TranslationTableGenerator;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Scanner;
-import javax.print.attribute.standard.PrinterState;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+
 
 /**
  *

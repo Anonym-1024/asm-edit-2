@@ -22,8 +22,8 @@ public class TranslationTableGenerator {
                 int pageAddr = pageOffset + offset;
                 int pte = pageAddr >> 8;
                 pte |= 0x1000;
-                result[i*2] = (byte)(pte & 0xFF);
-                result[i*2 + 1] = (byte)((pte & 0xFF00) >> 8);
+                result[i*2 + offset] = (byte)(pte & 0xFF);
+                result[i*2 + 1 + offset] = (byte)((pte & 0xFF00) >> 8);
                 pageOffset += 256;
             } else {
                 result[i*2] = (byte)0;

@@ -5,7 +5,6 @@
 package asmedit.machine.devices;
 
 import asmedit.machine.Device;
-import asmedit.machine.InterruptRegister;
 
 /**
  *

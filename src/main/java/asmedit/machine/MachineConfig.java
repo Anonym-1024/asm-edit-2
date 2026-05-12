@@ -52,6 +52,14 @@ public class MachineConfig {
         this.pageTableAddress = virtualMemoryAddress;
     }
 
+    public boolean isUseVirtualMemory() {
+        return useVirtualMemory;
+    }
+
+    public void setUseVirtualMemory(boolean useVirtualMemory) {
+        this.useVirtualMemory = useVirtualMemory;
+    }
+
     
     
     
@@ -71,6 +79,6 @@ public class MachineConfig {
     protected String defaultMemoryFile;
     protected int pageTableAddress;
     protected String defaultVirtualMemoryFile;
-    
+    protected boolean useVirtualMemory;
     
 }

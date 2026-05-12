@@ -5,7 +5,6 @@
 package asmedit.gui.devices;
 
 import asmedit.machine.Device;
-import asmedit.machine.devices.ConsoleDevice;
 import asmedit.machine.devices.KeyboardDevice;
 import javax.swing.JFrame;
 

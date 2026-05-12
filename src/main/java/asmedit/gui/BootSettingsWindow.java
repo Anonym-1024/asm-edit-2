@@ -6,10 +6,7 @@ package asmedit.gui;
 
 import asmedit.machine.MachineConfig;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -196,12 +193,14 @@ public class BootSettingsWindow extends javax.swing.JFrame {
             pageTableAddress.setEnabled(true);
             jLabel4.setEnabled(true);
             jLabel5.setEnabled(true);
+            config.setUseVirtualMemory(true);
         } else {
             chooseVirtualMemoryFile.setEnabled(false);
             virtualMemoryImageFile.setEnabled(false);
             pageTableAddress.setEnabled(false);
             jLabel4.setEnabled(false);
             jLabel5.setEnabled(false);
+            config.setUseVirtualMemory(false);
         }
     }//GEN-LAST:event_checkBoxActionPerformed
 
