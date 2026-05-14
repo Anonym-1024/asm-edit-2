@@ -308,6 +308,7 @@ public class EditorWindow extends javax.swing.JFrame {
             // Read the output from the process's standard input stream
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()))) {
+                errorLine.setForeground(Color.red);
                 errorLine.setText(reader.readAllAsString().replaceAll("\033\\[\\d+m", ""));
             }
 
