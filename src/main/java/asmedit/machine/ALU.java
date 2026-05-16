@@ -67,9 +67,12 @@ public class ALU {
     }
     
     public static int subs(int a, int b, ProcessStateRegister psr) {
-        b = -b;
+        a = a & 0xFF;
+        int _b = b & 0xFF;
+        b = -b & 0xFF;
         int res =  (a + b);
         int flags = 0;
+        System.out.println(res);
         if ((res & 0xFF) == 0) {
             flags |= 0b1000;
         }
@@ -79,7 +82,7 @@ public class ALU {
         if ((res & 0x100) == 0x100) {
             flags |= 0b0010;
         }
-        if ((a & 0x80) != (b & 0x80) && (res & 0x80) != (a & 0x80)) {
+        if ((a & 0x80) != (_b & 0x80) && (res & 0x80) != (a & 0x80)) {
             flags |= 0b0001;
         }
         
@@ -94,9 +97,12 @@ public class ALU {
     }
     
     public static int subcs(int a, int b, ProcessStateRegister psr) {
-        b = -b;
+        a = a & 0xFF;
+        int _b = b & 0xFF;
+        b = -b & 0xFF;
         int res =  (a + b + psr.getC());
         int flags = 0;
+        System.out.println(res);
         if ((res & 0xFF) == 0) {
             flags |= 0b1000;
         }
@@ -106,7 +112,7 @@ public class ALU {
         if ((res & 0x100) == 0x100) {
             flags |= 0b0010;
         }
-        if ((a & 0x80) != (b & 0x80) && (res & 0x80) != (a & 0x80)) {
+        if ((a & 0x80) != (_b & 0x80) && (res & 0x80) != (a & 0x80)) {
             flags |= 0b0001;
         }
         

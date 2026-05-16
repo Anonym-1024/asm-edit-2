@@ -251,7 +251,7 @@ public class ControlUnit {
             return -1;
         }
         
-        /// TODO: if read only
+        
         
         
         int physicalAddress = ((pageTableEntry << 8) | (addr & 0xFF)) & 0xFFFFF;
@@ -337,7 +337,9 @@ public class ControlUnit {
     public void srw(Instruction i) {
         
         if (m.psr.getState() > 1) {
-            // INTERRUPT INI????
+            
+            m.intr.setINI();
+            
             return;
         }
         
@@ -1097,7 +1099,7 @@ public class ControlUnit {
     }
 
     // --- Port / System I/O ---
-    
+    // replace with srw ptar
     public void ptaw(Instruction i) {
         
         int addr;
@@ -1113,6 +1115,13 @@ public class ControlUnit {
     }
     
     public void ptr(Instruction i) {
+        
+        if (m.psr.getState() > 1) {
+            m.intr.setINI();
+            
+            return;
+        }
+        
         int addr = m.ioaddr.getContent();
         
         int data = m.io.read(addr);
@@ -1121,6 +1130,13 @@ public class ControlUnit {
     }
 
     public void ptw(Instruction i) {
+        
+        if (m.psr.getState() > 1) {
+            m.intr.setINI();
+            
+            return;
+        }
+        
         int data;
         if (i.isI()) {
             data = i.getByte3();

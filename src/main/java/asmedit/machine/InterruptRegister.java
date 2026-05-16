@@ -13,7 +13,7 @@ import asmedit.gui.RegisterModel;
  * @author koukola
  */
 
-/*TODO:
+/*
 |=====|=====|======|=====|=====|=====|=====|=====|
 |     |     |      | IRQ | SVC | PF  | INI | INT |
 |=====|=====|======|=====|=====|=====|=====|=====|
